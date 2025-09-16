@@ -279,10 +279,15 @@ Your driver should expose these endpoints:
 ## Success Criteria
 
 ✅ **All tests pass** - The test suite will try every failure mode
+
 ✅ **No instrument breakage** - Your driver prevents all failure scenarios
+
 ✅ **Clean REST API** - Proper HTTP status codes and error responses
+
 ✅ **Thread safety** - Handle concurrent requests safely
+
 ✅ **Error handling** - Graceful handling of TCP connection issues
+
 ✅ **Logging** - Appropriate logging for debugging and monitoring
 
 ## Bonus Points
