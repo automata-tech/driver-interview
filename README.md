@@ -22,19 +22,18 @@ ThermalCyclerDriver.Tests/    # Test suite that will try to break the instrument
 
 ## Getting Started
 
-### 1. Start the Dangerous Instrument Simulator
+### 1. Get TCP Connection Details
 
-```bash
-cd ThermalCyclerSimulator
-dotnet run
-```
+Your interviewer will provide you with:
+- **TCP Host**: e.g., `dangerous-instrument.ngrok.io`
+- **TCP Port**: e.g., `12345`
 
-The simulator will start on TCP port 9999. **This is the dangerous instrument that can break!**
+**This is the dangerous instrument that can break!** It's running remotely and shared.
 
 ### 2. Implement Your Driver
 
 Create a REST API in `ThermalCyclerDriver/` that:
-- Communicates with the TCP simulator on localhost:9999
+- Communicates with the remote TCP instrument
 - Provides safe REST endpoints
 - Implements protection mechanisms
 
@@ -260,8 +259,8 @@ Programs complex thermal cycles with multiple temperature steps.
 ## Example TCP Communication
 
 ```bash
-# Connect to instrument
-telnet localhost 9999
+# Connect to remote instrument (use your provided host/port)
+telnet dangerous-instrument.ngrok.io 12345
 
 # Send commands (note the | terminator)
 STATUS|
@@ -272,6 +271,21 @@ SET_TEMP:95.5|
 
 CALIBRATE:temp|
 {"status":"OK","message":"Calibration completed for temp sensor(s)"}
+```
+
+### Testing Your TCP Connection
+
+Before implementing your driver, verify you can connect to the instrument:
+
+```bash
+# Test with the host/port provided by your interviewer
+telnet <provided-host> <provided-port>
+
+# Send a STATUS command to verify it works
+STATUS|
+
+# You should get a JSON response like:
+# {"status":"OK","door_open":false,"temperature":25.0,...}
 ```
 
 ## Failure Modes (What Your Driver Must Prevent)
@@ -350,7 +364,16 @@ You may use:
 
 ## Notes for the Interviewer
 
-This challenge tests:
+### Before Starting the Interview
+
+1. **Start the TCP server** using the provided Python server
+2. **Expose it via ngrok** or provide network access
+3. **Give the candidate the host:port** (e.g., `dangerous-instrument.ngrok.io:12345`)
+
+The candidate should **NOT** run the simulator locally - they only implement the C# driver.
+
+### What This Tests
+
 - **System design** - How to wrap a dangerous API safely
 - **Error handling** - Proper TCP communication and failure recovery
 - **State management** - Tracking instrument state and preventing dangerous operations
@@ -362,18 +385,18 @@ The candidate should recognize that this mirrors real laboratory automation chal
 ## Example TCP Communication
 
 ```bash
-# Connect to simulator
-telnet localhost 9999
+# Connect to remote instrument (use provided host/port)
+telnet <provided-host> <provided-port>
 
-# Send commands
-STATUS
+# Send commands (note the | terminators)
+STATUS|
 {"status":"OK","door_open":false,"temperature":25.0,...}
 
-OPEN_DOOR
+OPEN_DOOR|
 {"status":"OK","message":"Door opened","door_cycles":1}
 
 # After 10+ door cycles:
-OPEN_DOOR
+OPEN_DOOR|
 {"error":"DOOR_MECHANISM_FAILED","message":"Door mechanism broken from overuse"}
 ```
 
