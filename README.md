@@ -49,11 +49,16 @@ dotnet test --logger "console;verbosity=detailed"
 
 ## Instrument TCP API Reference
 
-The instrument accepts line-based commands over TCP and responds with JSON.
+The instrument uses a structured TCP protocol with parameter support.
+
+**Protocol Format:** `COMMAND:param1,param2|`
+- Commands end with `|` terminator
+- Parameters separated by commas after `:`
+- Line-based TCP (one command per line)
 
 ### Commands
 
-#### `STATUS`
+#### `STATUS|`
 Returns current instrument status.
 
 **Response:**
@@ -75,7 +80,7 @@ Returns current instrument status.
 }
 ```
 
-#### `OPEN_DOOR`
+#### `OPEN_DOOR|`
 Opens the instrument door.
 
 **⚠️ DANGER**:
@@ -100,7 +105,7 @@ Opens the instrument door.
 }
 ```
 
-#### `CLOSE_DOOR`
+#### `CLOSE_DOOR|`
 Closes the instrument door.
 
 **Response:**
@@ -111,10 +116,10 @@ Closes the instrument door.
 }
 ```
 
-#### `SET_TEMP <temperature>`
+#### `SET_TEMP:temperature|`
 Sets target temperature (-20°C to 120°C).
 
-**Example:** `SET_TEMP 95`
+**Example:** `SET_TEMP:95.5|`
 
 **⚠️ DANGER**:
 - **BREAKS from thermal shock** (>50°C change)
@@ -138,7 +143,7 @@ Sets target temperature (-20°C to 120°C).
 }
 ```
 
-#### `START_CYCLE`
+#### `START_CYCLE|`
 Starts a thermal cycle.
 
 **Requirements:**
@@ -154,7 +159,7 @@ Starts a thermal cycle.
 }
 ```
 
-#### `STOP_CYCLE`
+#### `STOP_CYCLE|`
 Stops the current cycle.
 
 **⚠️ DANGER**:
@@ -168,7 +173,7 @@ Stops the current cycle.
 }
 ```
 
-#### `EMERGENCY_STOP`
+#### `EMERGENCY_STOP|`
 Immediately stops all operations.
 
 **⚠️ DANGER**:
@@ -183,8 +188,13 @@ Immediately stops all operations.
 }
 ```
 
-#### `CALIBRATE`
+#### `CALIBRATE|` or `CALIBRATE:sensor_type|`
 Calibrates temperature sensors.
+
+**Examples:**
+- `CALIBRATE|` (all sensors)
+- `CALIBRATE:temp|` (temperature sensor only)
+- `CALIBRATE:pressure|` (pressure sensor only)
 
 **⚠️ DANGER**:
 - **BREAKS sensors if done with door open** (after 2 attempts)
@@ -198,7 +208,7 @@ Calibrates temperature sensors.
 }
 ```
 
-#### `RESET`
+#### `RESET|`
 Resets software state (NOT hardware damage).
 
 **Important**: Reset cannot fix broken hardware!
@@ -211,7 +221,7 @@ Resets software state (NOT hardware damage).
 }
 ```
 
-#### `GET_TEMP`
+#### `GET_TEMP|`
 Gets current temperature reading.
 
 **Response:**
@@ -223,7 +233,7 @@ Gets current temperature reading.
 }
 ```
 
-#### `MAINTENANCE_MODE`
+#### `MAINTENANCE_MODE|`
 Toggles maintenance mode.
 
 **Response:**
@@ -232,6 +242,36 @@ Toggles maintenance mode.
   "status": "OK",
   "message": "Maintenance mode enabled"
 }
+```
+
+### Advanced Commands (Bonus Challenge)
+
+#### `SET_CYCLE:cycles,temp1,time1,temp2,time2,...|`
+Programs complex thermal cycles with multiple temperature steps.
+
+**Example:** `SET_CYCLE:5,95,30,60,60,25,10|`
+- 5 cycles total
+- Step 1: 95°C for 30 seconds
+- Step 2: 60°C for 60 seconds
+- Step 3: 25°C for 10 seconds
+
+**⚠️ DANGER**: Extreme temperature ranges or too many steps can damage the control system.
+
+## Example TCP Communication
+
+```bash
+# Connect to instrument
+telnet localhost 9999
+
+# Send commands (note the | terminator)
+STATUS|
+{"status":"OK","door_open":false,"temperature":25.0,...}
+
+SET_TEMP:95.5|
+{"status":"OK","message":"Temperature set to 95.5°C",...}
+
+CALIBRATE:temp|
+{"status":"OK","message":"Calibration completed for temp sensor(s)"}
 ```
 
 ## Failure Modes (What Your Driver Must Prevent)
