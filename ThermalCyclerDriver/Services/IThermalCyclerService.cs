@@ -34,7 +34,7 @@ public class ThermalCyclerResponse
 }
 
 // TODO: Implement ThermalCyclerService that:
-// 1. Manages TCP connection to localhost:9999
+// 1. Manages TCP connection to the server hosted by your interviewer
 // 2. Implements all the safety logic to prevent instrument damage
 // 3. Tracks state to prevent dangerous operations
 // 4. Handles connection failures gracefully
