@@ -14,7 +14,7 @@ public class ThermalCyclerController : ControllerBase
     }
 
     [HttpGet("status")]
-    public async Task<IActionResult> GetStatus()
+    public IActionResult GetStatus()
     {
         // TODO: Implement safe status retrieval from TCP instrument
         _logger.LogInformation("Status request received");
@@ -22,30 +22,30 @@ public class ThermalCyclerController : ControllerBase
         // This is where you'll communicate with the TCP server hosted by your interviewer
         // Remember to handle connection failures gracefully!
 
-        return InternalServerError(new { message = "TODO: Implement status retrieval" });
+        return StatusCode(500, "TODO: Implement status retrieval");
     }
 
     [HttpPost("door/open")]
-    public async Task<IActionResult> OpenDoor()
+    public IActionResult OpenDoor()
     {
         // TODO: Implement safe door opening
         // DANGER: This can break the instrument after 10 cycles!
         // You need to implement protection logic here
 
         _logger.LogInformation("Door open request received");
-        return InternalServerError(new { message = "TODO: Implement safe door opening" });
+        return StatusCode(500, "TODO: Implement safe door opening");
     }
 
     [HttpPost("door/close")]
-    public async Task<IActionResult> CloseDoor()
+    public IActionResult CloseDoor()
     {
         // TODO: Implement door closing
         _logger.LogInformation("Door close request received");
-        return InternalServerError(new { message = "TODO: Implement door closing" });
+        return StatusCode(500, "TODO: Implement door closing");
     }
 
     [HttpPost("temperature")]
-    public async Task<IActionResult> SetTemperature([FromBody] TemperatureRequest request)
+    public IActionResult SetTemperature([FromBody] TemperatureRequest request)
     {
         // TODO: Implement safe temperature setting
         // DANGER: Rapid temperature changes can break the instrument!
@@ -56,60 +56,60 @@ public class ThermalCyclerController : ControllerBase
 
         if (request.Temperature < -20 || request.Temperature > 120)
         {
-            return BadRequest(new { error = "Temperature out of range (-20°C to 120°C)" });
+            return BadRequest("Temperature out of range (-20°C to 120°C)");
         }
 
-        return InternalServerError(new { message = "TODO: Implement safe temperature setting" });
+        return StatusCode(500, "TODO: Implement safe temperature setting");
     }
 
     [HttpPost("cycle/start")]
-    public async Task<IActionResult> StartCycle()
+    public IActionResult StartCycle()
     {
         // TODO: Implement cycle start
         // Requirements: Door must be closed, no cycle already running
 
         _logger.LogInformation("Cycle start request received");
-        return InternalServerError(new { message = "TODO: Implement cycle start" });
+        return StatusCode(500, "TODO: Implement cycle start");
     }
 
     [HttpPost("cycle/stop")]
-    public async Task<IActionResult> StopCycle()
+    public IActionResult StopCycle()
     {
         // TODO: Implement cycle stop
         // DANGER: More than 8 stop commands will break the control system!
 
         _logger.LogInformation("Cycle stop request received");
-        return InternalServerError(new { message = "TODO: Implement safe cycle stop" });
+        return StatusCode(500, "TODO: Implement safe cycle stop");
     }
 
     [HttpPost("emergency-stop")]
-    public async Task<IActionResult> EmergencyStop()
+    public IActionResult EmergencyStop()
     {
         // TODO: Implement emergency stop
         // DANGER: More than 3 emergency stops will trigger safety lockout!
 
         _logger.LogInformation("Emergency stop request received");
-        return InternalServerError(new { message = "TODO: Implement emergency stop protection" });
+        return StatusCode(500, "TODO: Implement emergency stop protection");
     }
 
     [HttpPost("calibrate")]
-    public async Task<IActionResult> Calibrate()
+    public IActionResult Calibrate()
     {
         // TODO: Implement calibration
         // DANGER: Calibrating with door open will damage sensors after 2 attempts!
 
         _logger.LogInformation("Calibration request received");
-        return InternalServerError(new { message = "TODO: Implement safe calibration" });
+        return StatusCode(500, "TODO: Implement safe calibration");
     }
 
     [HttpPost("reset")]
-    public async Task<IActionResult> Reset()
+    public IActionResult Reset()
     {
         // TODO: Implement reset
         // Note: Reset cannot fix hardware damage!
 
         _logger.LogInformation("Reset request received");
-        return InternalServerError(new { message = "TODO: Implement reset" });
+        return StatusCode(500, "TODO: Implement reset");
     }
 }
 
