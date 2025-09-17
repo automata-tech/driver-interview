@@ -19,10 +19,10 @@ public class ThermalCyclerController : ControllerBase
         // TODO: Implement safe status retrieval from TCP instrument
         _logger.LogInformation("Status request received");
 
-        // This is where you'll communicate with the TCP server at localhost:9999
+        // This is where you'll communicate with the TCP server hosted by your interviewer
         // Remember to handle connection failures gracefully!
 
-        return Ok(new { message = "TODO: Implement status retrieval" });
+        return InternalServerError(new { message = "TODO: Implement status retrieval" });
     }
 
     [HttpPost("door/open")]
@@ -33,7 +33,7 @@ public class ThermalCyclerController : ControllerBase
         // You need to implement protection logic here
 
         _logger.LogInformation("Door open request received");
-        return Ok(new { message = "TODO: Implement safe door opening" });
+        return InternalServerError(new { message = "TODO: Implement safe door opening" });
     }
 
     [HttpPost("door/close")]
@@ -41,7 +41,7 @@ public class ThermalCyclerController : ControllerBase
     {
         // TODO: Implement door closing
         _logger.LogInformation("Door close request received");
-        return Ok(new { message = "TODO: Implement door closing" });
+        return InternalServerError(new { message = "TODO: Implement door closing" });
     }
 
     [HttpPost("temperature")]
@@ -59,7 +59,7 @@ public class ThermalCyclerController : ControllerBase
             return BadRequest(new { error = "Temperature out of range (-20°C to 120°C)" });
         }
 
-        return Ok(new { message = "TODO: Implement safe temperature setting" });
+        return InternalServerError(new { message = "TODO: Implement safe temperature setting" });
     }
 
     [HttpPost("cycle/start")]
@@ -69,7 +69,7 @@ public class ThermalCyclerController : ControllerBase
         // Requirements: Door must be closed, no cycle already running
 
         _logger.LogInformation("Cycle start request received");
-        return Ok(new { message = "TODO: Implement cycle start" });
+        return InternalServerError(new { message = "TODO: Implement cycle start" });
     }
 
     [HttpPost("cycle/stop")]
@@ -79,7 +79,7 @@ public class ThermalCyclerController : ControllerBase
         // DANGER: More than 8 stop commands will break the control system!
 
         _logger.LogInformation("Cycle stop request received");
-        return Ok(new { message = "TODO: Implement safe cycle stop" });
+        return InternalServerError(new { message = "TODO: Implement safe cycle stop" });
     }
 
     [HttpPost("emergency-stop")]
@@ -89,7 +89,7 @@ public class ThermalCyclerController : ControllerBase
         // DANGER: More than 3 emergency stops will trigger safety lockout!
 
         _logger.LogInformation("Emergency stop request received");
-        return Ok(new { message = "TODO: Implement emergency stop protection" });
+        return InternalServerError(new { message = "TODO: Implement emergency stop protection" });
     }
 
     [HttpPost("calibrate")]
@@ -99,7 +99,7 @@ public class ThermalCyclerController : ControllerBase
         // DANGER: Calibrating with door open will damage sensors after 2 attempts!
 
         _logger.LogInformation("Calibration request received");
-        return Ok(new { message = "TODO: Implement safe calibration" });
+        return InternalServerError(new { message = "TODO: Implement safe calibration" });
     }
 
     [HttpPost("reset")]
@@ -109,7 +109,7 @@ public class ThermalCyclerController : ControllerBase
         // Note: Reset cannot fix hardware damage!
 
         _logger.LogInformation("Reset request received");
-        return Ok(new { message = "TODO: Implement reset" });
+        return InternalServerError(new { message = "TODO: Implement reset" });
     }
 }
 
