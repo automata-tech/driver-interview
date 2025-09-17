@@ -34,3 +34,6 @@ app.MapControllers();
 app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }));
 
 app.Run();
+
+// Make the implicit Program class public so test projects can access it
+public partial class Program { }

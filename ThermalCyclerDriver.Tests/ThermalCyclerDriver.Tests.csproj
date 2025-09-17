@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,4 +24,11 @@
     <ProjectReference Include="..\ThermalCyclerDriver\ThermalCyclerDriver.csproj" />
   </ItemGroup>
 
+  <Target Name="CopyDepsJson" AfterTargets="Build">
+    <Copy
+      SourceFiles="..\ThermalCyclerDriver\bin\Debug\net8.0\ThermalCyclerDriver.deps.json"
+      DestinationFiles="$(OutputPath)testhost.deps.json"
+      SkipUnchangedFiles="true"
+    />
+  </Target>
 </Project>

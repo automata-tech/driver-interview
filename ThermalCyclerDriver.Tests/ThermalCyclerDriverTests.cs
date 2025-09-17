@@ -2,6 +2,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 using System.Text;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Xunit;
 using Xunit.Abstractions;
 
